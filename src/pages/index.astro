@@ -1,11 +1,81 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabaseClient';
+import "../styles/global.css";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Fetch profiles joined with auth.users
+const { data: users, error } = await supabase
+  .from("user_profiles")
+  .select("*");
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Users</title>
+  </head>
+  <body class="min-h-screen bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-gray-800">
+          Users
+        </h1>
+        <a
+          href="/register"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition"
+        >
+          Register
+        </a>
+      </div>
+
+      <!-- Error -->
+      {error && (
+        <div class="px-6 py-3 bg-red-50 text-red-700 text-sm border-b border-red-200">
+          Error: {error.message}
+        </div>
+      )}
+
+      <!-- Table -->
+      {users && users.length > 0 ? (
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-600">
+            <thead class="bg-gray-50 text-gray-700 uppercase text-xs">
+              <tr>
+                <th scope="col" class="px-6 py-3">ID</th>
+                <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">Country</th>
+                <th scope="col" class="px-6 py-3">Profile Created</th>
+                <th scope="col" class="px-6 py-3">Email</th>
+                <th scope="col" class="px-6 py-3">Auth Created</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              {users.map((u) => (
+                <tr class="hover:bg-gray-50 transition">
+                  <td class="px-6 py-3 font-mono text-xs text-gray-500">{u.id}</td>
+                  <td class="px-6 py-3">{u.name}</td>
+                  <td class="px-6 py-3">{u.country}</td>
+                  <td class="px-6 py-3">{new Date(u.profile_created_at).toLocaleDateString()}<br />
+  <span class="text-xs text-gray-500">
+    {new Date(u.profile_created_at).toLocaleTimeString()}
+  </span></td>
+                  <td class="px-6 py-3 font-medium text-gray-800">{u.email}</td>
+                  <td class="px-6 py-3"> 
+                  {new Date(u.user_created_at).toLocaleDateString()}<br />
+  <span class="text-xs text-gray-500">
+    {new Date(u.user_created_at).toLocaleTimeString()}
+  </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div class="px-6 py-6 text-gray-500 text-center">
+          No records found
+        </div>
+      )}
+    </div>
+  </body>
+</html>

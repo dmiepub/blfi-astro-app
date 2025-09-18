@@ -1,0 +1,50 @@
+---
+import { supabase } from '../lib/supabaseClient.js';
+
+let user = null;
+let profile = null;
+
+// Fetch current session user
+const { data: { session } } = await supabase.auth.getSession();
+
+if (session) {
+  const userId = session.user.id;
+
+  // Get profile data from your `profiles` table
+  const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+  if (data) profile = data;
+  user = session.user;
+}
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 flex items-center justify-center min-h-screen">
+    <main class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      {user ? (
+        <>
+          <h1 class="text-2xl font-bold mb-4 text-center">Welcome, {profile.name}!</h1>
+          <p class="mb-2"><strong>Email:</strong> {user.email}</p>
+          <p class="mb-2"><strong>Country:</strong> {profile.country}</p>
+          <p class="mb-4"><strong>Joined:</strong> {new Date(profile.created_at).toLocaleDateString()}</p>
+
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+              window.location.href = '/login';
+            }}
+            class="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+          >
+            Logout
+          </button>
+        </>
+      ) : (
+        <p class="text-center text-gray-600">You are not logged in. <a href="/login" class="text-blue-600 underline">Login</a></p>
+      )}
+    </main>
+  </body>
+</html>
