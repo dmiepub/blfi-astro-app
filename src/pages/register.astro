@@ -83,6 +83,12 @@ import "../styles/global.css";
     </div>
 
     <!-- ✅ Load script -->
+    <script>
+        window.ENV = {
+          SUPABASE_URL: import.meta.env.PUBLIC_SUPABASE_URL,
+          SUPABASE_ANON_KEY: import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
+        };
+      </script>
     <script type="module">
       import { initRegisterForm } from "/scripts/registerClient.js";
       initRegisterForm();
