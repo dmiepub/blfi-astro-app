@@ -1,16 +1,16 @@
 ---
 // src/pages/login.astro
-import Login from '../components/Login.jsx';
+import AdminDashboard from '../components/AdminDashboard.jsx';
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Login</title>
+    <title>Dashboard</title>
   </head>
   <body class="bg-gray-100">
     <div class="min-h-screen flex items-center justify-center">
-      <Login client:load />  <!-- React island -->
+      <AdminDashboard client:load />  <!-- React island -->
     </div>
   </body>
 </html>

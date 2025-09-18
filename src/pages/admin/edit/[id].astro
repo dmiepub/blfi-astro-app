@@ -1,0 +1,19 @@
+---
+// src/pages/admin/edit/[id].astro
+export const prerender = false; // <- This disables static prerender
+import AdminEditUser from '../../../components/AdminEditUser.jsx';
+// Astro.params.id comes from the URL
+const { id } = Astro.params;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit user</title>
+  </head>
+  <body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+      <AdminEditUser client:load userId={id} />  <!-- React island -->
+    </div>
+  </body>
+</html>

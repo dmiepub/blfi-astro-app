@@ -1,13 +1,16 @@
 ---
-import Users from "../components/Users.jsx";
+// src/pages/login.astro
+import AuthGuard from '../components/AuthGuard.jsx';
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>User List</title>
+    <title>Home</title>
   </head>
-  <body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-    <Users client:load />
+  <body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+      <AuthGuard client:load />  <!-- React island -->
+    </div>
   </body>
 </html>
