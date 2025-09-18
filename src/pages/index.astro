@@ -2,12 +2,11 @@
 import { supabase } from '../lib/supabaseClient';
 import "../styles/global.css";
 
-// Fetch profiles 
+// Fetch all profiles (public anon access)
 const { data: profiles, error } = await supabase
   .from("profiles")
-  .select("*");
-
-console.log(error, profiles);  
+  .select("id, name, email, country, created_at")
+  .order("created_at", { ascending: false });
 ---
 
 <html lang="en">
@@ -51,17 +50,21 @@ console.log(error, profiles);
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              {profiles.map((u) => (
-                <tr class="hover:bg-gray-50 transition">
-                  <td class="px-6 py-3 font-mono text-xs text-gray-500">{u.id}</td>
-                  <td class="px-6 py-3">{u.name}</td>
-                   <td class="px-6 py-3">{u.email}</td>
-                  <td class="px-6 py-3">{u.country}</td>
-                  <td class="px-6 py-3">{new Date(u.created_at).toLocaleDateString()}            
-                    {new Date(u.created_at).toLocaleTimeString()}
-                  </td>
-                </tr>
-              ))}
+              {profiles.map((u) => {
+                const createdAt = new Date(u.created_at);
+                return (
+                  <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-3 font-mono text-xs text-gray-500">{u.id}</td>
+                    <td class="px-6 py-3">{u.name}</td>
+                    <td class="px-6 py-3">{u.email}</td>
+                    <td class="px-6 py-3">{u.country}</td>
+                    <td class="px-6 py-3">
+                      {createdAt.toLocaleDateString()}{" "}
+                      {createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
