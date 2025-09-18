@@ -4,3 +4,5 @@ export const supabase = createClient(
   import.meta.env.PUBLIC_SUPABASE_URL,
   import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
+
+console.log("Using Supabase URL:", import.meta.env.PUBLIC_SUPABASE_URL);

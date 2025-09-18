@@ -2,10 +2,12 @@
 import { supabase } from '../lib/supabaseClient';
 import "../styles/global.css";
 
-// Fetch profiles joined with auth.users
-const { data: users, error } = await supabase
+// Fetch profiles 
+const { data: profiles, error } = await supabase
   .from("profiles")
   .select("*");
+
+console.log(error, profiles);  
 ---
 
 <html lang="en">
@@ -36,7 +38,7 @@ const { data: users, error } = await supabase
       )}
 
       <!-- Table -->
-      {users && users.length > 0 ? (
+      {profiles && profiles.length > 0 ? (
         <div class="overflow-x-auto">
           <table class="w-full text-sm text-left text-gray-600">
             <thead class="bg-gray-50 text-gray-700 uppercase text-xs">
@@ -49,7 +51,7 @@ const { data: users, error } = await supabase
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              {users.map((u) => (
+              {profiles.map((u) => (
                 <tr class="hover:bg-gray-50 transition">
                   <td class="px-6 py-3 font-mono text-xs text-gray-500">{u.id}</td>
                   <td class="px-6 py-3">{u.name}</td>
