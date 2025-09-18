@@ -46,6 +46,7 @@ export async function initRegisterForm() {
         {
           id: userData.user.id,
           name,
+          email,
           country,
         },
       ]);
